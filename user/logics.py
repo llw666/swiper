@@ -1,8 +1,10 @@
 import random
 
 import requests
+from django.core.cache import cache
 
 from swiper import cfg
+from common import keys
 
 
 def gen_rand_code(length=6):
@@ -24,4 +26,5 @@ def send_vcode(phonenum):
     if response.status_code != 200:
         return False
     else:
+        cache.set(keys.VCODE %phonenum, vcode, 180)  # 将验证码添加到缓存
         return True
